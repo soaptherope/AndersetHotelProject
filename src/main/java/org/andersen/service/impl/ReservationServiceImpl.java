@@ -1,5 +1,7 @@
 package org.andersen.service.impl;
 
+import org.andersen.exception.ApartmentNotFoundException;
+import org.andersen.exception.InvalidClientNameException;
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
 import org.andersen.service.ReservationService;
@@ -25,8 +27,15 @@ public class ReservationServiceImpl implements ReservationService {
                 return;
             }
 
+            if (name.isBlank()) {
+                throw new InvalidClientNameException("Invalid name");
+            }
+
             apartment.setStatus(ApartmentStatusEnum.RESERVED);
             apartment.setNameOfClient(name);
+
+        } else {
+            throw new ApartmentNotFoundException("No such apartment");
         }
     }
 
