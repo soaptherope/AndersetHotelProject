@@ -6,7 +6,7 @@ public class Apartment {
 
     private static int apartmentId;
 
-    private final int id;
+    private int id;
 
     private double price;
 
@@ -24,6 +24,8 @@ public class Apartment {
     public int getId() {
         return id;
     }
+
+    public void setId(int id) { this.id = id; }
 
     public double getPrice() {
         return price;
