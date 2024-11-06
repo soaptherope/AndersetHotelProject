@@ -29,12 +29,11 @@ public class HotelServiceImplTest {
     void setup() {
         apartment = new Apartment(50);
         when(hotel.getApartments()).thenReturn(new ArrayList<>());
+        hotelService.addApartment(apartment);
     }
 
     @Test
     void addApartment() {
-        hotelService.addApartment(apartment);
-
         assertEquals(1, hotel.getApartments().size());
         assertEquals(apartment, hotel.getApartments().get(0));
     }
@@ -43,7 +42,6 @@ public class HotelServiceImplTest {
     void addMultipleApartments() {
         Apartment apartmentTwo = new Apartment(100);
 
-        hotelService.addApartment(apartment);
         hotelService.addApartment(apartmentTwo);
 
         assertEquals(2, hotel.getApartments().size());
