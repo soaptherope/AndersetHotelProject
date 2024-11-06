@@ -42,26 +42,26 @@ public class ApartmentServiceImplTest {
     }
 
     @Test
-    void testGetAllApartments() {
+    void getAllApartments() {
         List<Apartment> result = apartmentService.getAllApartments();
         assertEquals(apartments, result);
     }
 
     @Test
-    void testFindApartmentById_Found() {
+    void findApartmentById_Found() {
         Optional<Apartment> result = apartmentService.findApartmentById(1);
         assertTrue(result.isPresent());
         assertEquals(apartments.get(0), result.get());
     }
 
     @Test
-    void testFindApartmentById_NotFound() {
+    void findApartmentById_NotFound() {
         Optional<Apartment> result = apartmentService.findApartmentById(999);
         assertFalse(result.isPresent());
     }
 
     @Test
-    void testSortById() {
+    void sortById() {
         List<Apartment> result = apartmentService.sortById(1, 10);
         assertEquals(3, result.size());
         assertEquals(1, result.get(0).getId());
@@ -69,14 +69,14 @@ public class ApartmentServiceImplTest {
     }
 
     @Test
-    void testSortByPrice() {
+    void sortByPrice() {
         List<Apartment> result = apartmentService.sortByPrice(1, 10);
         assertEquals(3, result.size());
         assertEquals(100, result.get(0).getPrice());
     }
 
     @Test
-    void testSortByNameOfClient() {
+    void sortByNameOfClient() {
         apartments.get(1).setNameOfClient("Alisher");
         List<Apartment> result = apartmentService.sortByNameOfClient(1, 10);
         assertEquals(3, result.size());
@@ -84,7 +84,7 @@ public class ApartmentServiceImplTest {
     }
 
     @Test
-    void testSortByStatus() {
+    void sortByStatus() {
         List<Apartment> result = apartmentService.sortByStatus(1, 10);
         assertEquals(3, result.size());
         assertEquals(ApartmentStatusEnum.FREE, result.get(0).getStatus());

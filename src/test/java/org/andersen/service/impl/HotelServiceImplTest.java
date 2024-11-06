@@ -32,7 +32,7 @@ public class HotelServiceImplTest {
     }
 
     @Test
-    void testAddApartment() {
+    void addApartment() {
         hotelService.addApartment(apartment);
 
         assertEquals(1, hotel.getApartments().size());
@@ -40,7 +40,7 @@ public class HotelServiceImplTest {
     }
 
     @Test
-    void testAddMultipleApartments() {
+    void addMultipleApartments() {
         Apartment apartmentTwo = new Apartment(100);
 
         hotelService.addApartment(apartment);

@@ -34,7 +34,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReserveApartment_WhenApartmentIsFree_ReservesApartment() {
+    void reserveApartment_WhenApartmentIsFree_ReservesApartment() {
         apartment.setStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
@@ -46,7 +46,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReserveApartment_WhenApartmentIsNotFree_DoesNotChangeStatus() {
+    void reserveApartment_WhenApartmentIsNotFree_DoesNotChangeStatus() {
         apartment.setStatus(ApartmentStatusEnum.RESERVED);
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
@@ -57,7 +57,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReleaseApartment_WhenApartmentIsReserved_ReleasesApartment() {
+    void releaseApartment_WhenApartmentIsReserved_ReleasesApartment() {
         apartment.setStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
@@ -69,7 +69,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReleaseApartment_WhenApartmentIsNotReserved_DoesNotChangeStatus() {
+    void releaseApartment_WhenApartmentIsNotReserved_DoesNotChangeStatus() {
         apartment.setStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
@@ -81,7 +81,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReleaseApartment_WhenClientNameDoesNotMatch_DoesNotChangeStatus() {
+    void releaseApartment_WhenClientNameDoesNotMatch_DoesNotChangeStatus() {
         apartment.setStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
@@ -93,7 +93,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReserveApartment_WhenApartmentDoesNotExist_ThrowsException() {
+    void reserveApartment_WhenApartmentDoesNotExist_ThrowsException() {
         when(apartmentServiceMock.findApartmentById(999)).thenReturn(Optional.empty());
 
         assertThrows(ApartmentNotFoundException.class, () ->
@@ -101,7 +101,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void testReserveApartment_WithEmptyClientName_ThrowsException() {
+    void reserveApartment_WithEmptyClientName_ThrowsException() {
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         assertThrows(InvalidClientNameException.class, () ->
