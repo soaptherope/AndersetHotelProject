@@ -23,7 +23,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (apartmentOptional.isPresent()) {
             Apartment apartment = apartmentOptional.get();
 
-            if (!apartment.getStatus().equals(ApartmentStatusEnum.FREE)) {
+            if (!apartment.getApartmentStatus().equals(ApartmentStatusEnum.FREE)) {
                 return;
             }
 
@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
                 throw new InvalidClientNameException("Invalid name");
             }
 
-            apartment.setStatus(ApartmentStatusEnum.RESERVED);
+            apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
             apartment.setNameOfClient(name);
 
         } else {
@@ -46,11 +46,11 @@ public class ReservationServiceImpl implements ReservationService {
         if (apartmentOptional.isPresent()) {
             Apartment apartment = apartmentOptional.get();
 
-            if (!apartment.getStatus().equals(ApartmentStatusEnum.RESERVED) || !apartment.getNameOfClient().equals(name)) {
+            if (!apartment.getApartmentStatus().equals(ApartmentStatusEnum.RESERVED) || !apartment.getNameOfClient().equals(name)) {
                 return;
             }
 
-            apartment.setStatus(ApartmentStatusEnum.FREE);
+            apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
             apartment.setNameOfClient("");
         }
     }
