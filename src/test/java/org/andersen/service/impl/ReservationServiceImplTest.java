@@ -35,60 +35,60 @@ public class ReservationServiceImplTest {
 
     @Test
     void reserveApartment_WhenApartmentIsFree_ReservesApartment() {
-        apartment.setStatus(ApartmentStatusEnum.FREE);
+        apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         reservationService.reserveApartment(1, "Alisher");
 
-        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getStatus());
+        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getApartmentStatus());
         assertEquals("Alisher", apartment.getNameOfClient());
     }
 
     @Test
     void reserveApartment_WhenApartmentIsNotFree_DoesNotChangeStatus() {
-        apartment.setStatus(ApartmentStatusEnum.RESERVED);
+        apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         reservationService.reserveApartment(1, "Alisher");
 
-        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getStatus());
+        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getApartmentStatus());
         assertEquals("", apartment.getNameOfClient());
     }
 
     @Test
     void releaseApartment_WhenApartmentIsReserved_ReleasesApartment() {
-        apartment.setStatus(ApartmentStatusEnum.RESERVED);
+        apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         reservationService.releaseApartment(1, "Alisher");
 
-        assertEquals(ApartmentStatusEnum.FREE, apartment.getStatus());
+        assertEquals(ApartmentStatusEnum.FREE, apartment.getApartmentStatus());
         assertEquals("", apartment.getNameOfClient());
     }
 
     @Test
     void releaseApartment_WhenApartmentIsNotReserved_DoesNotChangeStatus() {
-        apartment.setStatus(ApartmentStatusEnum.FREE);
+        apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         reservationService.releaseApartment(1, "Alisher");
 
-        assertEquals(ApartmentStatusEnum.FREE, apartment.getStatus());
+        assertEquals(ApartmentStatusEnum.FREE, apartment.getApartmentStatus());
         assertEquals("", apartment.getNameOfClient());
     }
 
     @Test
     void releaseApartment_WhenClientNameDoesNotMatch_DoesNotChangeStatus() {
-        apartment.setStatus(ApartmentStatusEnum.RESERVED);
+        apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
         when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
 
         reservationService.releaseApartment(1, "NotAlisher");
 
-        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getStatus());
+        assertEquals(ApartmentStatusEnum.RESERVED, apartment.getApartmentStatus());
         assertEquals("Alisher", apartment.getNameOfClient());
     }
 

@@ -87,7 +87,7 @@ public class ApartmentServiceImplTest {
     void sortByStatus() {
         List<Apartment> result = apartmentService.sortByStatus(1, 10);
         assertEquals(3, result.size());
-        assertEquals(ApartmentStatusEnum.FREE, result.get(0).getStatus());
+        assertEquals(ApartmentStatusEnum.FREE, result.get(0).getApartmentStatus());
     }
 
 
