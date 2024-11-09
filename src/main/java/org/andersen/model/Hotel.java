@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 public class Hotel {
 
-    private List<Apartment> apartments = new ArrayList<>();
+    private final List<Apartment> apartments = new ArrayList<>();
 
 }
