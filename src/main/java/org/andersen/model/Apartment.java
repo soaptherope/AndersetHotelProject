@@ -2,8 +2,10 @@ package org.andersen.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Apartment {
+public class Apartment implements Serializable {
 
     private static int apartmentId;
 
