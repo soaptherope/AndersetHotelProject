@@ -29,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
                     return;
                 }
 
-                if (name.isBlank()) {
+                if (name.isBlank())  {
                     throw new InvalidClientNameException("Invalid name");
                 }
 
