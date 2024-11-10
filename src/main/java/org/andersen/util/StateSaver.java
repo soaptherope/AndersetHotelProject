@@ -8,7 +8,7 @@ public class StateSaver {
     public void saveState(Object state, String filePath) {
         try (FileOutputStream fileOut = new FileOutputStream(filePath);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            out.writeObject(state);
+             out.writeObject(state);
         } catch (IOException e) {
             e.printStackTrace();
         }
