@@ -9,6 +9,7 @@ import org.andersen.service.impl.ReservationServiceImpl;
 import org.andersen.util.StateLoader;
 import org.andersen.util.StateSaver;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,13 @@ public class Main {
         hotelServiceImpl.addApartment(new Apartment(200));
         hotelServiceImpl.addApartment(new Apartment(250));
 
-        StateSaver stateSaver = new StateSaver();
+        StateSaver stateSaver = null;
+        try {
+            stateSaver = new StateSaver();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String stateFilePath = StateConfig.getStateFilePath();
         stateSaver.saveState(hotel, stateFilePath);
 
