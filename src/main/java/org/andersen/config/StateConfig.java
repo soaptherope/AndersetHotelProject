@@ -19,4 +19,8 @@ public class StateConfig {
     public static String getStateFilePath() {
         return properties.getProperty("state.file.path");
     }
+
+    public static boolean isApartmentStatusChangeEnabled() {
+        return Boolean.parseBoolean(properties.getProperty("apartment.status.change.enabled"));
+    }
 }
