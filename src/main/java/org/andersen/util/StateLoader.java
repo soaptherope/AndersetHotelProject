@@ -6,15 +6,18 @@ import java.io.IOException;
 
 public class StateLoader {
 
-    private FileInputStream fileInputStream;
-    private ObjectInputStream objectInputStream;
+    private final FileInputStream fileInputStream;
+    private final ObjectInputStream objectInputStream;
 
     public StateLoader(FileInputStream fileInputStream, ObjectInputStream objectInputStream) {
         this.fileInputStream = fileInputStream;
         this.objectInputStream = objectInputStream;
     }
 
-    public StateLoader() {}
+    public StateLoader(String filePath) throws IOException {
+        this.fileInputStream = new FileInputStream(filePath);
+        this.objectInputStream = new ObjectInputStream(fileInputStream);
+    }
 
     public <T> T loadState(String filePath, Class<T> clazz) {
         T state = null;

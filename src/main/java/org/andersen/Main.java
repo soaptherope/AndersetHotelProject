@@ -24,6 +24,8 @@ public class Main {
 
         ReservationServiceImpl reservationService = new ReservationServiceImpl(apartmentService);
 
+        String stateFilePath = StateConfig.getStateFilePath();
+
         hotelServiceImpl.addApartment(new Apartment(100));
         hotelServiceImpl.addApartment(new Apartment(150));
         hotelServiceImpl.addApartment(new Apartment(200));
@@ -35,8 +37,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        String stateFilePath = StateConfig.getStateFilePath();
         stateSaver.saveState(hotel, stateFilePath);
 
         System.out.println("All Apartments:");
@@ -70,8 +70,16 @@ public class Main {
         reservedApartment = apartmentService.findApartmentById(1);
         reservedApartment.ifPresent(System.out::println);
 
-        StateLoader stateLoader = new StateLoader();
+        StateLoader stateLoader;
+        try {
+            stateLoader = new StateLoader(stateFilePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         Hotel loadedHotel = stateLoader.loadState(stateFilePath, Hotel.class);
+
+        System.out.println(loadedHotel);
 
         System.out.println("\nAll Apartments After Operations:");
         allApartments.forEach(apartment -> System.out.println(apartment.toString()));
