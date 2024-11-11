@@ -24,12 +24,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public Optional<Apartment> findApartmentById(int id) {
-        for (Apartment apartment : hotel.getApartments()) {
-            if (apartment.getId() == id) {
-                return Optional.of(apartment);
-            }
-        }
-        return Optional.empty();
+        return hotel.getApartments().stream()
+                .filter(apartment -> apartment.getId() == id)
+                .findFirst();
     }
 
     @Override
@@ -59,7 +56,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public List<Apartment> sortByStatus(int pageNumber, int pageSize) {
         List<Apartment> sortedApartments = hotel.getApartments();
-        sortedApartments.sort(Comparator.comparing(Apartment::getStatus));
+        sortedApartments.sort(Comparator.comparing(Apartment::getApartmentStatus));
 
         return getPaginatedList(sortedApartments, pageNumber, pageSize);
     }
