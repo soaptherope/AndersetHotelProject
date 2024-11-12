@@ -28,7 +28,7 @@ public class ReservationController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
         int apartmentId = Integer.parseInt(request.getParameter("id"));
         String clientName = request.getParameter("name");
