@@ -1,18 +1,17 @@
 package controller;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.andersen.controller.ReservationController;
 import org.andersen.service.ReservationService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ReservationControllerTest {
@@ -26,16 +25,8 @@ public class ReservationControllerTest {
     @Mock
     private ReservationService reservationService;
 
-    @Mock
-    private ServletContext servletContext;
-
     @InjectMocks
     private ReservationController reservationController;
-
-    @BeforeEach
-    public void setUp() {
-        lenient().when(request.getServletContext()).thenReturn(servletContext);
-    }
 
     @Test
     public void doPost_ReserveApartment() throws Exception {
@@ -52,7 +43,6 @@ public class ReservationControllerTest {
 
     @Test
     public void doPost_ReleaseApartment() throws Exception {
-        // Given: mock request parameters
         when(request.getParameter("action")).thenReturn("release");
         when(request.getParameter("id")).thenReturn("1");
         when(request.getParameter("name")).thenReturn("Alisher");

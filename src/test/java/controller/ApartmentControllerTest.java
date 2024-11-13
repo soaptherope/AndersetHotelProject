@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.andersen.controller.ApartmentController;
 import org.andersen.service.ApartmentService;
 import org.andersen.service.HotelService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,14 +43,11 @@ public class ApartmentControllerTest {
     @Mock
     private ApartmentService apartmentService;
 
-    @BeforeEach
-    public void setUp() {
-        lenient().when(request.getServletContext()).thenReturn(servletContext);
-        lenient().when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
-    }
-
     @Test
     public void doGet_DefaultSort() throws ServletException, IOException {
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
+
         when(request.getParameter("sortBy")).thenReturn(null);
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
@@ -65,6 +61,9 @@ public class ApartmentControllerTest {
 
     @Test
     public void doGet_SortByPrice() throws ServletException, IOException {
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
+
         when(request.getParameter("sortBy")).thenReturn("price");
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
@@ -78,6 +77,9 @@ public class ApartmentControllerTest {
 
     @Test
     public void doGet_SortById() throws ServletException, IOException {
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
+
         when(request.getParameter("sortBy")).thenReturn("id");
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
@@ -91,6 +93,9 @@ public class ApartmentControllerTest {
 
     @Test
     public void doGet_SortByNameOfClient() throws ServletException, IOException {
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
+
         when(request.getParameter("sortBy")).thenReturn("nameOfClient");
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
@@ -104,6 +109,9 @@ public class ApartmentControllerTest {
 
     @Test
     public void doGet_SortByStatus() throws ServletException, IOException {
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp")).thenReturn(dispatcher);
+
         when(request.getParameter("sortBy")).thenReturn("status");
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
