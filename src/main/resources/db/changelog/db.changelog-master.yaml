@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: alisher
+      changes:
+        - createTable:
+            tableName: serialized_data
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+              - column:
+                  name: type
+                  type: varchar(255)
+              - column:
+                  name: data
+                  type: bigint
+        - addPrimaryKey:
+            constraintName: pk_serialized_data
+            tableName: serialized_data
+            columnNames: id

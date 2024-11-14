@@ -1,32 +1,22 @@
 package org.andersen.util;
 
-import org.andersen.config.StateConfig;
-
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class StateSaver {
 
-    private final FileOutputStream fileOutputStream;
-    private final ObjectOutputStream objectOutputStream;
+    public byte[] saveState(Object object) throws IOException {
+        byte[] serializedData;
 
-    public StateSaver(FileOutputStream fileOutputStream, ObjectOutputStream objectOutputStream) {
-        this.fileOutputStream = fileOutputStream;
-        this.objectOutputStream = objectOutputStream;
-    }
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
 
-    public StateSaver() throws IOException {
-        this.fileOutputStream = new FileOutputStream(StateConfig.getStateFilePath());
-        this.objectOutputStream = new ObjectOutputStream(fileOutputStream);
-    }
+            objectOutputStream.writeObject(object);
+            objectOutputStream.flush();
 
-    public void saveState(Object state, String filePath) {
-        try {
-            objectOutputStream.writeObject(state);
-        } catch (IOException e) {
-            e.printStackTrace();
+            serializedData = byteArrayOutputStream.toByteArray();
         }
+        return serializedData;
     }
 }
-

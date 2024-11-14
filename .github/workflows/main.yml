@@ -9,29 +9,63 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: hotel_admin
+          POSTGRES_PASSWORD: andersen
+          POSTGRES_DB: andersen_hotel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hotel_admin"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v3  
-      with:
-        distribution: 'corretto'
-        java-version: '21'  
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '21'
 
-    - name: Cache Maven packages
-      uses: actions/cache@v3  
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-    - name: Build with Maven
-      run: mvn -B clean package --file pom.xml
+      - name: Set up database connection for tests
+        run: |
+          echo "DB_URL=jdbc:postgresql://localhost:5432/andersen_hotel" >> $GITHUB_ENV
+          echo "DB_USER=hotel_admin" >> $GITHUB_ENV
+          echo "DB_PASSWORD=andersen" >> $GITHUB_ENV
+          echo "DB_DRIVER=org.postgresql.Driver" >> $GITHUB_ENV
+          echo "DB_CHANGELOG=src/main/resources/db/changelog/db.changelog-master.yaml" >> $GITHUB_ENV
 
-    - name: Upload JAR Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: andersen_hotel
-        path: target/*.jar
+      - name: Run Liquibase migrations
+        run: |
+          mvn liquibase:update -Ddb.url=${{ env.DB_URL }} \
+                                -Ddb.username=${{ env.DB_USER }} \
+                                -Ddb.password=${{ env.DB_PASSWORD }} \
+                                -Ddb.driver=${{ env.DB_DRIVER }} \
+                                -Ddb.changelogFile=${{ env.DB_CHANGELOG }}
+
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: andersen_hotel
+          path: target/*.jar

@@ -1,66 +1,57 @@
 package util;
 
-import org.andersen.config.StateConfig;
 import org.andersen.util.StateSaver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.ObjectInputStream;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class StateSaverTest {
 
-    @Mock
-    private FileOutputStream mockFileOutputStream;
-
-    @Mock
-    private ObjectOutputStream mockObjectOutputStream;
-
-    @InjectMocks
     private StateSaver stateSaver;
 
-    private final String testFilePath = "path/to/test/file";
-
-    @Test
-    void saveState_Success() throws IOException {
-        TestObject testObject = new TestObject("test");
-
-        stateSaver.saveState(testObject, testFilePath);
-
-        verify(mockObjectOutputStream, times(1)).writeObject(testObject);
+    @BeforeEach
+    void setUp() {
+        stateSaver = new StateSaver();
     }
 
     @Test
-    void saveState_IOException() throws IOException {
-        TestObject testObject = new TestObject("test");
+    void saveState_Success() throws IOException, ClassNotFoundException {
+        SerializableTestObject originalObject = new SerializableTestObject("test");
 
-        doThrow(new IOException()).when(mockObjectOutputStream).writeObject(any());
+        byte[] serializedData = stateSaver.saveState(originalObject);
 
-        assertDoesNotThrow(() -> stateSaver.saveState(testObject, testFilePath));
+        assertNotNull(serializedData);
+        assertTrue(serializedData.length > 0);
 
-        verify(mockObjectOutputStream, times(1)).writeObject(testObject);
+        SerializableTestObject deserializedObject = deserialize(serializedData);
+
+        assertEquals(originalObject, deserializedObject);
     }
 
-
     @Test
-    void constructor_InitializesOutputStreams() throws IOException {
-        try (FileOutputStream realFileOut = new FileOutputStream(StateConfig.getStateFilePath());
-             ObjectOutputStream realObjectOut = new ObjectOutputStream(realFileOut)) {
-            StateSaver stateSaver = new StateSaver();
-            assertNotNull(stateSaver);
+    void saveState_Fail_NonSerializableObject() {
+        NotSerializableTestObject nonSerializableObject = new NotSerializableTestObject("test");
+
+        assertThrows(IOException.class, () -> stateSaver.saveState(nonSerializableObject));
+    }
+
+    private SerializableTestObject deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data); ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+            return (SerializableTestObject) objectInputStream.readObject();
         }
     }
 
-    record TestObject(String data) implements Serializable {}
+    record SerializableTestObject(String data) implements java.io.Serializable {
+    }
+
+    record NotSerializableTestObject(String data) {
+    }
 }
