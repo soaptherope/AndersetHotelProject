@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: alisher
+      author: alisher.s
       changes:
         - createTable:
             tableName: serialized_data
