@@ -37,7 +37,6 @@ public class ReservationServiceImplTest {
     @BeforeEach
     void setup() {
         apartment = new Apartment(100);
-
         mockedStateConfig = mockStatic(StateConfig.class);
     }
 
