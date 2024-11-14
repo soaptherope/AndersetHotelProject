@@ -48,7 +48,7 @@ jobs:
           echo "DB_USER=hotel_admin" >> $GITHUB_ENV
           echo "DB_PASSWORD=andersen" >> $GITHUB_ENV
           echo "DB_DRIVER=org.postgresql.Driver" >> $GITHUB_ENV
-          echo "DB_CHANGELOG=db/changelog/db.changelog-master.yaml" >> $GITHUB_ENV
+          echo "DB_CHANGELOG=src/main/resources/db/changelog/db.changelog-master.yaml" >> $GITHUB_ENV
 
       - name: Run Liquibase migrations
         run: |
