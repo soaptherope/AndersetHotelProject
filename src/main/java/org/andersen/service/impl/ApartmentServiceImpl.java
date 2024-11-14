@@ -18,7 +18,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public  List<Apartment> getAllApartments() {
+    public List<Apartment> getAllApartments() {
         return hotel.getApartments();
     }
 

@@ -11,6 +11,7 @@ import org.andersen.service.impl.ApartmentServiceImpl;
 import org.andersen.service.impl.ReservationServiceImpl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/reservations")
 public class ReservationController extends HttpServlet {
@@ -24,7 +25,11 @@ public class ReservationController extends HttpServlet {
         Hotel hotel = (Hotel) context.getAttribute("hotel");
 
         ApartmentServiceImpl apartmentService = new ApartmentServiceImpl(hotel);
-        this.reservationService = new ReservationServiceImpl(apartmentService);
+        try {
+            this.reservationService = new ReservationServiceImpl(apartmentService);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

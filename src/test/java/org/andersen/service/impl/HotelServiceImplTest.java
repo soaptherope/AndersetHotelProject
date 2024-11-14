@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,7 +27,7 @@ public class HotelServiceImplTest {
     private Apartment apartment;
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
         apartment = new Apartment(50);
         when(hotel.getApartments()).thenReturn(new ArrayList<>());
         hotelService.addApartment(apartment);
@@ -39,7 +40,7 @@ public class HotelServiceImplTest {
     }
 
     @Test
-    void addMultipleApartments() {
+    void addMultipleApartments() throws IOException {
         Apartment apartmentTwo = new Apartment(100);
 
         hotelService.addApartment(apartmentTwo);

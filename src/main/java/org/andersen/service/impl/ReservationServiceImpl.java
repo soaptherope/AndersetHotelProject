@@ -5,15 +5,20 @@ import org.andersen.exception.ApartmentNotFoundException;
 import org.andersen.exception.InvalidClientNameException;
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
+import org.andersen.repository.StateRepository;
 import org.andersen.service.ReservationService;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class ReservationServiceImpl implements ReservationService {
 
     private final ApartmentServiceImpl apartmentService;
 
-    public ReservationServiceImpl(ApartmentServiceImpl apartmentService) {
+    private final StateRepository stateRepository = new StateRepository();
+
+    public ReservationServiceImpl(ApartmentServiceImpl apartmentService) throws SQLException {
         this.apartmentService = apartmentService;
     }
 
@@ -29,12 +34,18 @@ public class ReservationServiceImpl implements ReservationService {
                     return;
                 }
 
-                if (name.isBlank())  {
+                if (name.isBlank()) {
                     throw new InvalidClientNameException("Invalid name");
                 }
 
                 apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
                 apartment.setNameOfClient(name);
+
+                try {
+                    stateRepository.saveSerializedData(apartment);
+                } catch (SQLException | IOException e) {
+                    throw new RuntimeException(e);
+                }
 
             } else {
                 throw new ApartmentNotFoundException("No such apartment");
@@ -56,6 +67,12 @@ public class ReservationServiceImpl implements ReservationService {
 
                 apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
                 apartment.setNameOfClient("");
+
+                try {
+                    stateRepository.saveSerializedData(apartment);
+                } catch (SQLException | IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
