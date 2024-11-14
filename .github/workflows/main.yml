@@ -51,7 +51,12 @@ jobs:
           echo "DB_CHANGELOG=db/changelog/db.changelog-master.yaml" >> $GITHUB_ENV
 
       - name: Run Liquibase migrations
-        run: mvn liquibase:update
+        run: |
+          mvn liquibase:update -Ddb.url=${{ env.DB_URL }} \
+                                -Ddb.username=${{ env.DB_USER }} \
+                                -Ddb.password=${{ env.DB_PASSWORD }} \
+                                -Ddb.driver=${{ env.DB_DRIVER }} \
+                                -Ddb.changelogFile=${{ env.DB_CHANGELOG }}
 
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml

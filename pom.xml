@@ -13,6 +13,11 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.11.3</junit.version>
+        <db.url>jdbc:postgresql://localhost:5432/andersen_hotel</db.url>
+        <db.username>hotel_admin</db.username>
+        <db.password>andersen</db.password>
+        <db.driver>org.postgresql.Driver</db.driver>
+        <db.changelogFile>db/changelog/db.changelog-master.yaml</db.changelogFile>
     </properties>
 
     <dependencyManagement>
@@ -84,6 +89,13 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.0.0</version>
+                <configuration>
+                    <url>${db.url}</url>
+                    <username>${db.username}</username>
+                    <password>${db.password}</password>
+                    <driver>${db.driver}</driver>
+                    <changeLogFile>${db.changelogFile}</changeLogFile>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
