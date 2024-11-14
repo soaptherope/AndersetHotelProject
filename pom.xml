@@ -17,7 +17,7 @@
         <db.username>hotel_admin</db.username>
         <db.password>andersen</db.password>
         <db.driver>org.postgresql.Driver</db.driver>
-        <db.changelogFile>db/changelog/db.changelog-master.yaml</db.changelogFile>
+        <db.changelogFile>src/main/resources/db/changelog/db.changelog-master.yaml</db.changelogFile>
     </properties>
 
     <dependencyManagement>
