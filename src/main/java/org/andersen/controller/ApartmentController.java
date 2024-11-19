@@ -1,14 +1,12 @@
 package org.andersen.controller;
 
 import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.andersen.model.Apartment;
-import org.andersen.model.Hotel;
 import org.andersen.service.ApartmentService;
 import org.andersen.service.HotelService;
 import org.andersen.service.impl.ApartmentServiceImpl;
@@ -26,13 +24,9 @@ public class ApartmentController extends HttpServlet {
 
     @Override
     public void init() {
-        ServletContext context = getServletContext();
-
-        Hotel hotel = (Hotel) context.getAttribute("hotel");
-
-        apartmentService = new ApartmentServiceImpl(hotel);
+        apartmentService = new ApartmentServiceImpl();
         try {
-            this.hotelService = new HotelServiceImpl(hotel);
+            this.hotelService = new HotelServiceImpl();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -47,14 +41,14 @@ public class ApartmentController extends HttpServlet {
         List<Apartment> apartments;
 
         if (sortBy == null || "none".equals(sortBy)) {
-            apartments = apartmentService.getAllApartments();
+            apartments = apartmentService.findAllApartments();
         } else {
             apartments = switch (sortBy) {
                 case "id" -> apartmentService.sortById(pageNumber, pageSize);
                 case "price" -> apartmentService.sortByPrice(pageNumber, pageSize);
                 case "nameOfClient" -> apartmentService.sortByNameOfClient(pageNumber, pageSize);
                 case "status" -> apartmentService.sortByStatus(pageNumber, pageSize);
-                default -> apartmentService.getAllApartments();
+                default -> apartmentService.findAllApartments();
             };
         }
 

@@ -3,13 +3,8 @@ package org.andersen.service;
 import org.andersen.model.Apartment;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ApartmentService {
-
-    List<Apartment> getAllApartments();
-
-    Optional<Apartment> findApartmentById(int id);
 
     List<Apartment> sortByStatus(int pageNumber, int pageSize);
 
@@ -18,4 +13,14 @@ public interface ApartmentService {
     List<Apartment> sortByPrice(int pageNumber, int pageSize);
 
     List<Apartment> sortByNameOfClient(int pageNumber, int pageSize);
+
+    Apartment findById(long id);
+
+    void saveApartment(Apartment apartment);
+
+    void updateApartment(Apartment apartment);
+
+    void deleteApartment(Apartment apartment);
+
+    List<Apartment> findAllApartments();
 }

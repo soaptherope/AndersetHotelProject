@@ -51,11 +51,11 @@ public class ApartmentControllerTest {
         when(request.getParameter("sortBy")).thenReturn(null);
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
-        when(apartmentService.getAllApartments()).thenReturn(Collections.emptyList());
+        when(apartmentService.findAllApartments()).thenReturn(Collections.emptyList());
 
         apartmentController.doGet(request, response);
 
-        verify(apartmentService).getAllApartments();
+        verify(apartmentService).findAllApartments();
         verify(dispatcher).forward(request, response);
     }
 

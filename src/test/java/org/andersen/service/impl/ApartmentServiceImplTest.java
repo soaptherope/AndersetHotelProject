@@ -12,9 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,21 +42,14 @@ public class ApartmentServiceImplTest {
 
     @Test
     void getAllApartments() {
-        List<Apartment> result = apartmentService.getAllApartments();
+        List<Apartment> result = apartmentService.findAllApartments();
         assertEquals(apartments, result);
     }
 
     @Test
     void findApartmentById_Found() {
-        Optional<Apartment> result = apartmentService.findApartmentById(1);
-        assertTrue(result.isPresent());
-        assertEquals(apartments.get(0), result.get());
-    }
-
-    @Test
-    void findApartmentById_NotFound() {
-        Optional<Apartment> result = apartmentService.findApartmentById(999);
-        assertFalse(result.isPresent());
+        Apartment result = apartmentService.findById(1);
+        assertEquals(apartments.get(0), result);
     }
 
     @Test

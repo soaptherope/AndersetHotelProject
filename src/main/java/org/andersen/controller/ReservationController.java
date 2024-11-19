@@ -1,11 +1,9 @@
 package org.andersen.controller;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.andersen.model.Hotel;
 import org.andersen.service.ReservationService;
 import org.andersen.service.impl.ApartmentServiceImpl;
 import org.andersen.service.impl.ReservationServiceImpl;
@@ -20,11 +18,7 @@ public class ReservationController extends HttpServlet {
 
     @Override
     public void init() {
-        ServletContext context = getServletContext();
-
-        Hotel hotel = (Hotel) context.getAttribute("hotel");
-
-        ApartmentServiceImpl apartmentService = new ApartmentServiceImpl(hotel);
+        ApartmentServiceImpl apartmentService = new ApartmentServiceImpl();
         try {
             this.reservationService = new ReservationServiceImpl(apartmentService);
         } catch (SQLException e) {
