@@ -26,12 +26,11 @@ public class Apartment implements Serializable {
     @Column(name = "client_name", length = 40)
     private String nameOfClient;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
     public Apartment(double price) {
-        this.hotel = new Hotel("Andersen");
         this.price = price;
         this.apartmentStatus = ApartmentStatusEnum.FREE;
         this.nameOfClient = "";

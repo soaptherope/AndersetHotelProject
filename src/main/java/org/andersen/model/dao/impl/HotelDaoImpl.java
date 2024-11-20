@@ -1,5 +1,8 @@
 package org.andersen.model.dao.impl;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.andersen.config.HibernateSession;
 import org.andersen.model.Hotel;
 import org.andersen.model.dao.HotelDao;
@@ -7,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+import java.util.Optional;
 
 public class HotelDaoImpl implements HotelDao {
 
@@ -56,6 +60,21 @@ public class HotelDaoImpl implements HotelDao {
     public List<Hotel> findAll() {
         try (Session session = HibernateSession.getSessionFactory().openSession()) {
             return session.createQuery("FROM Apartment", Hotel.class).list();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Hotel> findByName(String name) {
+        try (Session session = HibernateSession.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Hotel> query = cb.createQuery(Hotel.class);
+            Root<Hotel> root = query.from(Hotel.class);
+            query.select(root).where(cb.equal(root.get("name"), name));
+
+            Hotel hotel = session.createQuery(query).uniqueResult();
+            return Optional.ofNullable(hotel);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

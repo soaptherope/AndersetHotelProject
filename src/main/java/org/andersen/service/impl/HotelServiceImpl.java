@@ -11,6 +11,7 @@ import org.andersen.service.HotelService;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class HotelServiceImpl implements HotelService {
 
@@ -27,6 +28,15 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void addApartment(Apartment apartment) throws IOException {
+        Optional<Hotel> hotelOptional = hotelDao.findByName("Andersen");
+
+        Hotel hotel = hotelOptional.orElseGet(() -> {
+            Hotel newHotel = new Hotel("Andersen");
+            hotelDao.save(newHotel);
+            return newHotel;
+        });
+
+        apartment.setHotel(hotel);
         apartmentService.saveApartment(apartment);
 
         try {
