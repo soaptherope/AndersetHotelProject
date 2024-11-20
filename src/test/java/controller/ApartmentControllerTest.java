@@ -52,13 +52,14 @@ public class ApartmentControllerTest {
         when(request.getParameter("sortBy")).thenReturn(null);
         when(request.getParameter("pageNumber")).thenReturn("1");
         when(request.getParameter("pageSize")).thenReturn("5");
-        when(apartmentService.findAll()).thenReturn(Collections.emptyList());
+        when(apartmentService.sortByField(1, 5, "none")).thenReturn(Collections.emptyList());
 
         apartmentController.doGet(request, response);
 
-        verify(apartmentService).findAll();
+        verify(apartmentService).sortByField(1, 5, "none");
         verify(dispatcher).forward(request, response);
     }
+
 
     @Test
     public void doGet_SortByPrice() throws ServletException, IOException {
