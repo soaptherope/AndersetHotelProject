@@ -2,7 +2,7 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
-import org.andersen.model.Hotel;
+import org.andersen.model.dao.ApartmentDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class ApartmentServiceImplTest {
 
     @Mock
-    private Hotel hotel;
+    private ApartmentDao apartmentDao;
 
     @InjectMocks
     private ApartmentServiceImpl apartmentService;
@@ -37,7 +37,8 @@ public class ApartmentServiceImplTest {
         apartments.add(new Apartment(300));
         apartments.get(2).setId(3);
 
-        when(hotel.getApartments()).thenReturn(apartments);
+        when(apartmentDao.findAll()).thenReturn(apartments);
+        when(apartmentDao.findById(1)).thenReturn(apartments.get(0));
     }
 
     @Test

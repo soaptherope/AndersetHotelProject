@@ -21,7 +21,7 @@ public class Hotel implements Serializable {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<Apartment> apartments = new ArrayList<>();
 
     public Hotel(String name) {

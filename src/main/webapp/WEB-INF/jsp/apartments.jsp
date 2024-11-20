@@ -51,6 +51,13 @@
                         Name of Client: <%= apartment.getNameOfClient() %><br>
                         Status: <%= apartment.getApartmentStatus() %><br>
 
+                        <form action="apartments" method="POST" style="display:inline;">
+                            <input type="hidden" name="apartmentId" value="<%= apartment.getId() %>">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Delete</button>
+                        </form>
+
+
                         <%-- Buttons for Reserve/Release --%>
                         <% if (apartment.getApartmentStatus() == ApartmentStatusEnum.FREE) { %>
                             <form action="reservations" method="POST" style="display:inline;">

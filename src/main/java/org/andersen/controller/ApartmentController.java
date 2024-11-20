@@ -59,12 +59,33 @@ public class ApartmentController extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        double price = Double.parseDouble(request.getParameter("price"));
+        String method = request.getParameter("_method");
 
-        Apartment newApartment = new Apartment(price);
-        hotelService.addApartment(newApartment);
+        if ("DELETE".equalsIgnoreCase(method)) {
+            doDelete(request, response);
+        } else {
+            double price = Double.parseDouble(request.getParameter("price"));
+            Apartment newApartment = new Apartment(price);
+            hotelService.addApartment(newApartment);
+
+            response.sendRedirect(request.getContextPath() + "/apartments?sortBy=none&pageNumber=1&pageSize=5");
+        }
+    }
+
+    @Override
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long apartmentId = Long.parseLong(request.getParameter("apartmentId"));
+
+        Apartment apartment = apartmentService.findById(apartmentId);
+        if (apartment == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        apartmentService.deleteApartment(apartment);
 
         response.sendRedirect(request.getContextPath() + "/apartments?sortBy=none&pageNumber=1&pageSize=5");
     }
+
 }
 
