@@ -2,7 +2,7 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.Hotel;
-import org.andersen.model.dao.HotelDao;
+import org.andersen.model.dao.impl.HotelDaoImpl;
 import org.andersen.service.ApartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class HotelServiceImplTest {
 
     @Mock
-    private HotelDao hotelDao;
+    private HotelDaoImpl hotelDao;
 
     @Mock
     private ApartmentService apartmentService;

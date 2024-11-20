@@ -2,13 +2,13 @@ package org.andersen.model.dao.impl;
 
 import org.andersen.config.HibernateSession;
 import org.andersen.model.Apartment;
-import org.andersen.model.dao.ApartmentDao;
+import org.andersen.model.dao.DaoModel;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class ApartmentDaoImpl implements ApartmentDao {
+public class ApartmentDaoImpl implements DaoModel<Apartment> {
 
     @Override
     public Apartment findById(long id) {

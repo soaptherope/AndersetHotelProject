@@ -5,14 +5,14 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.andersen.config.HibernateSession;
 import org.andersen.model.Hotel;
-import org.andersen.model.dao.HotelDao;
+import org.andersen.model.dao.DaoModel;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Optional;
 
-public class HotelDaoImpl implements HotelDao {
+public class HotelDaoImpl implements DaoModel<Hotel> {
 
     @Override
     public Hotel findById(long id) {
@@ -65,7 +65,6 @@ public class HotelDaoImpl implements HotelDao {
         }
     }
 
-    @Override
     public Optional<Hotel> findByName(String name) {
         try (Session session = HibernateSession.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();

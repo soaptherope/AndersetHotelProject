@@ -1,7 +1,7 @@
 package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
-import org.andersen.model.dao.ApartmentDao;
+import org.andersen.model.dao.impl.ApartmentDaoImpl;
 import org.andersen.service.ApartmentService;
 
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.List;
 
 public class ApartmentServiceImpl implements ApartmentService {
 
-    private final ApartmentDao apartmentDao;
+    private final ApartmentDaoImpl apartmentDao;
 
-    public ApartmentServiceImpl(ApartmentDao apartmentDao) {
+    public ApartmentServiceImpl(ApartmentDaoImpl apartmentDao) {
         this.apartmentDao = apartmentDao;
     }
 

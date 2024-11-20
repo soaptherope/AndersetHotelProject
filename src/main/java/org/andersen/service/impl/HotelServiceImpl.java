@@ -2,7 +2,7 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.Hotel;
-import org.andersen.model.dao.HotelDao;
+import org.andersen.model.dao.impl.HotelDaoImpl;
 import org.andersen.repository.StateRepository;
 import org.andersen.service.ApartmentService;
 import org.andersen.service.HotelService;
@@ -17,10 +17,10 @@ public class HotelServiceImpl implements HotelService {
 
     private final StateRepository stateRepository = new StateRepository();
 
-    private final HotelDao hotelDao;
+    private final HotelDaoImpl hotelDao;
 
 
-    public HotelServiceImpl(HotelDao hotelDao, ApartmentService apartmentService) throws SQLException {
+    public HotelServiceImpl(HotelDaoImpl hotelDao, ApartmentService apartmentService) throws SQLException {
         this.hotelDao = hotelDao;
         this.apartmentService = apartmentService;
     }

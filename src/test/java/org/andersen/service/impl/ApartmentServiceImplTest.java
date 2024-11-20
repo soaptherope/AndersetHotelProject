@@ -2,7 +2,7 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
-import org.andersen.model.dao.ApartmentDao;
+import org.andersen.model.dao.impl.ApartmentDaoImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class ApartmentServiceImplTest {
 
     @Mock
-    private ApartmentDao apartmentDao;
+    private ApartmentDaoImpl apartmentDao;
 
     @InjectMocks
     private ApartmentServiceImpl apartmentService;
