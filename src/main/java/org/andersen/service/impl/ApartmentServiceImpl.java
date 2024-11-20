@@ -2,7 +2,6 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.dao.ApartmentDao;
-import org.andersen.model.dao.impl.ApartmentDaoImpl;
 import org.andersen.service.ApartmentService;
 
 import java.util.ArrayList;
@@ -11,7 +10,11 @@ import java.util.List;
 
 public class ApartmentServiceImpl implements ApartmentService {
 
-    private final ApartmentDao apartmentDao = new ApartmentDaoImpl();
+    private final ApartmentDao apartmentDao;
+
+    public ApartmentServiceImpl(ApartmentDao apartmentDao) {
+        this.apartmentDao = apartmentDao;
+    }
 
     @Override
     public List<Apartment> sortById(int pageNumber, int pageSize) {

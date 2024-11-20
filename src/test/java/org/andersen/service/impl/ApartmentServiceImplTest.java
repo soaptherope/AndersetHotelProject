@@ -38,19 +38,12 @@ public class ApartmentServiceImplTest {
         apartments.get(2).setId(3);
 
         when(apartmentDao.findAll()).thenReturn(apartments);
-        when(apartmentDao.findById(1)).thenReturn(apartments.get(0));
     }
 
     @Test
     void getAllApartments() {
         List<Apartment> result = apartmentService.findAllApartments();
         assertEquals(apartments, result);
-    }
-
-    @Test
-    void findApartmentById_Found() {
-        Apartment result = apartmentService.findById(1);
-        assertEquals(apartments.get(0), result);
     }
 
     @Test

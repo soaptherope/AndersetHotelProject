@@ -4,6 +4,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.andersen.model.dao.impl.ApartmentDaoImpl;
 import org.andersen.service.ReservationService;
 import org.andersen.service.impl.ApartmentServiceImpl;
 import org.andersen.service.impl.ReservationServiceImpl;
@@ -18,7 +19,7 @@ public class ReservationController extends HttpServlet {
 
     @Override
     public void init() {
-        ApartmentServiceImpl apartmentService = new ApartmentServiceImpl();
+        ApartmentServiceImpl apartmentService = new ApartmentServiceImpl(new ApartmentDaoImpl());
         try {
             this.reservationService = new ReservationServiceImpl(apartmentService);
         } catch (SQLException e) {

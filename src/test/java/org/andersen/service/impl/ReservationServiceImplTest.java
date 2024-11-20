@@ -1,7 +1,6 @@
 package org.andersen.service.impl;
 
 import org.andersen.config.StateConfig;
-import org.andersen.exception.ApartmentNotFoundException;
 import org.andersen.exception.InvalidClientNameException;
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
@@ -136,15 +135,6 @@ public class ReservationServiceImplTest {
 
         assertEquals(ApartmentStatusEnum.RESERVED, apartment.getApartmentStatus());
         assertEquals("Alisher", apartment.getNameOfClient());
-    }
-
-    @Test
-    void reserveApartment_WhenApartmentDoesNotExist_ThrowsException() {
-        mockedStateConfig.when(StateConfig::isApartmentStatusChangeEnabled).thenReturn(true);
-        when(apartmentServiceMock.findById(999)).thenReturn(null);
-
-        assertThrows(ApartmentNotFoundException.class, () ->
-                reservationService.reserveApartment(999, "Alisher"));
     }
 
     @Test

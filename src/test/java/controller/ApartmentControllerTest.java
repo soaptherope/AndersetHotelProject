@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.andersen.controller.ApartmentController;
+import org.andersen.model.Apartment;
 import org.andersen.service.ApartmentService;
 import org.andersen.service.HotelService;
 import org.junit.jupiter.api.Test;
@@ -125,12 +126,45 @@ public class ApartmentControllerTest {
 
     @Test
     public void doPost_AddApartment() throws IOException {
+        when(request.getParameter("_method")).thenReturn("POST");
         when(request.getParameter("price")).thenReturn("100");
+
+        doNothing().when(hotelService).addApartment(any(Apartment.class));
 
         apartmentController.doPost(request, response);
 
         verify(hotelService).addApartment(argThat(apartment -> apartment.getPrice() == 100));
+        verify(response).sendRedirect(contains("apartments?sortBy=none&pageNumber=1&pageSize=5"));
+    }
 
-        verify(response).sendRedirect("null/apartments?sortBy=none&pageNumber=1&pageSize=5");
+    @Test
+    public void doDelete_ValidApartmentId() throws IOException {
+        long apartmentId = 1L;
+        Apartment apartment = new Apartment();
+        apartment.setId(apartmentId);
+
+        when(apartmentService.findById(apartmentId)).thenReturn(apartment);
+        doNothing().when(apartmentService).deleteApartment(apartment);
+
+        when(request.getParameter("apartmentId")).thenReturn(String.valueOf(apartmentId));
+
+        apartmentController.doDelete(request, response);
+
+        verify(apartmentService).findById(apartmentId);
+        verify(apartmentService).deleteApartment(apartment);
+        verify(response).sendRedirect(contains("apartments?sortBy=none&pageNumber=1&pageSize=5"));
+    }
+
+    @Test
+    public void doDelete_InvalidApartmentId() throws IOException {
+        long apartmentId = 999L;
+
+        when(apartmentService.findById(apartmentId)).thenReturn(null);
+        when(request.getParameter("apartmentId")).thenReturn(String.valueOf(apartmentId));
+
+        apartmentController.doDelete(request, response);
+
+        verify(apartmentService).findById(apartmentId);
+        verify(response).setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 }

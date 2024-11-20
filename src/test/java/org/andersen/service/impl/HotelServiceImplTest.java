@@ -2,6 +2,8 @@ package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
 import org.andersen.model.Hotel;
+import org.andersen.model.dao.HotelDao;
+import org.andersen.service.ApartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,16 +12,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class HotelServiceImplTest {
 
     @Mock
-    private Hotel hotel;
+    private HotelDao hotelDao;
+
+    @Mock
+    private ApartmentService apartmentService;
 
     @InjectMocks
     private HotelServiceImpl hotelService;
@@ -27,26 +32,33 @@ public class HotelServiceImplTest {
     private Apartment apartment;
 
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
         apartment = new Apartment(50);
-        when(hotel.getApartments()).thenReturn(new ArrayList<>());
+    }
+
+    @Test
+    void addApartment_whenHotelExists_shouldAddApartment() throws IOException {
+        Hotel existingHotel = new Hotel("Andersen");
+        when(hotelDao.findByName("Andersen")).thenReturn(Optional.of(existingHotel));
+
+        doNothing().when(apartmentService).saveApartment(any(Apartment.class));
+
         hotelService.addApartment(apartment);
+
+        verify(hotelDao, never()).save(any(Hotel.class));
+        verify(apartmentService).saveApartment(apartment);
     }
 
     @Test
-    void addApartment() {
-        assertEquals(1, hotel.getApartments().size());
-        assertEquals(apartment, hotel.getApartments().get(0));
-    }
+    void addApartment_whenHotelDoesNotExist_shouldCreateHotelAndAddApartment() throws IOException {
+        when(hotelDao.findByName("Andersen")).thenReturn(Optional.empty());
 
-    @Test
-    void addMultipleApartments() throws IOException {
-        Apartment apartmentTwo = new Apartment(100);
+        doNothing().when(hotelDao).save(any(Hotel.class));
+        doNothing().when(apartmentService).saveApartment(any(Apartment.class));
 
-        hotelService.addApartment(apartmentTwo);
+        hotelService.addApartment(apartment);
 
-        assertEquals(2, hotel.getApartments().size());
-        assertEquals(apartment, hotel.getApartments().get(0));
-        assertEquals(apartmentTwo, hotel.getApartments().get(1));
+        verify(hotelDao).save(any(Hotel.class));
+        verify(apartmentService).saveApartment(apartment);
     }
 }
