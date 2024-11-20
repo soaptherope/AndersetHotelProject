@@ -4,28 +4,27 @@ import org.andersen.model.Apartment;
 import org.andersen.model.Hotel;
 import org.andersen.model.dao.impl.HotelDaoImpl;
 import org.andersen.repository.StateRepository;
-import org.andersen.service.ApartmentService;
-import org.andersen.service.HotelService;
+import org.andersen.service.CrudService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
-public class HotelServiceImpl implements HotelService {
+public class HotelServiceImpl implements CrudService<Hotel> {
 
-    private final ApartmentService apartmentService;
+    private final ApartmentServiceImpl apartmentService;
 
     private final StateRepository stateRepository = new StateRepository();
 
     private final HotelDaoImpl hotelDao;
 
 
-    public HotelServiceImpl(HotelDaoImpl hotelDao, ApartmentService apartmentService) throws SQLException {
+    public HotelServiceImpl(HotelDaoImpl hotelDao, ApartmentServiceImpl apartmentService) throws SQLException {
         this.hotelDao = hotelDao;
         this.apartmentService = apartmentService;
     }
 
-    @Override
     public void addApartment(Apartment apartment) throws IOException {
         Optional<Hotel> hotelOptional = hotelDao.findByName("Andersen");
 
@@ -36,7 +35,7 @@ public class HotelServiceImpl implements HotelService {
         });
 
         apartment.setHotel(hotel);
-        apartmentService.saveApartment(apartment);
+        apartmentService.save(apartment);
 
         try {
             stateRepository.saveSerializedData(apartment);
@@ -48,5 +47,25 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Hotel findById(long id) {
         return hotelDao.findById(id);
+    }
+
+    @Override
+    public void save(Hotel hotel) {
+        hotelDao.save(hotel);
+    }
+
+    @Override
+    public void update(Hotel hotel) {
+        hotelDao.update(hotel);
+    }
+
+    @Override
+    public void delete(Hotel hotel) {
+        hotelDao.delete(hotel);
+    }
+
+    @Override
+    public List<Hotel> findAll() {
+        return hotelDao.findAll();
     }
 }

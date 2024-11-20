@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.andersen.model.Apartment;
 import org.andersen.model.dao.impl.ApartmentDaoImpl;
 import org.andersen.model.dao.impl.HotelDaoImpl;
-import org.andersen.service.ApartmentService;
-import org.andersen.service.HotelService;
 import org.andersen.service.impl.ApartmentServiceImpl;
 import org.andersen.service.impl.HotelServiceImpl;
 
@@ -21,8 +19,8 @@ import java.util.List;
 @WebServlet("/apartments")
 public class ApartmentController extends HttpServlet {
 
-    private ApartmentService apartmentService;
-    private HotelService hotelService;
+    private ApartmentServiceImpl apartmentService;
+    private HotelServiceImpl hotelService;
 
     @Override
     public void init() {
@@ -40,24 +38,17 @@ public class ApartmentController extends HttpServlet {
         int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
 
-        List<Apartment> apartments;
-
         if (sortBy == null || "none".equals(sortBy)) {
-            apartments = apartmentService.findAllApartments();
-        } else {
-            apartments = switch (sortBy) {
-                case "id" -> apartmentService.sortById(pageNumber, pageSize);
-                case "price" -> apartmentService.sortByPrice(pageNumber, pageSize);
-                case "nameOfClient" -> apartmentService.sortByNameOfClient(pageNumber, pageSize);
-                case "status" -> apartmentService.sortByStatus(pageNumber, pageSize);
-                default -> apartmentService.findAllApartments();
-            };
+            sortBy = "none";
         }
+
+        List<Apartment> apartments = apartmentService.sortByField(pageNumber, pageSize, sortBy);
 
         request.setAttribute("apartments", apartments);
         RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/jsp/apartments.jsp");
         dispatcher.forward(request, response);
     }
+
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -84,7 +75,7 @@ public class ApartmentController extends HttpServlet {
             return;
         }
 
-        apartmentService.deleteApartment(apartment);
+        apartmentService.delete(apartment);
 
         response.sendRedirect(request.getContextPath() + "/apartments?sortBy=none&pageNumber=1&pageSize=5");
     }

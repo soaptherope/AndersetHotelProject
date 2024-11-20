@@ -42,13 +42,13 @@ public class ApartmentServiceImplTest {
 
     @Test
     void getAllApartments() {
-        List<Apartment> result = apartmentService.findAllApartments();
+        List<Apartment> result = apartmentService.findAll();
         assertEquals(apartments, result);
     }
 
     @Test
     void sortById() {
-        List<Apartment> result = apartmentService.sortById(1, 10);
+        List<Apartment> result = apartmentService.sortByField(1, 10, "id");
         assertEquals(3, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(2, result.get(1).getId());
@@ -56,7 +56,7 @@ public class ApartmentServiceImplTest {
 
     @Test
     void sortByPrice() {
-        List<Apartment> result = apartmentService.sortByPrice(1, 10);
+        List<Apartment> result = apartmentService.sortByField(1, 10, "price");
         assertEquals(3, result.size());
         assertEquals(100, result.get(0).getPrice());
     }
@@ -64,14 +64,14 @@ public class ApartmentServiceImplTest {
     @Test
     void sortByNameOfClient() {
         apartments.get(1).setNameOfClient("Alisher");
-        List<Apartment> result = apartmentService.sortByNameOfClient(1, 10);
+        List<Apartment> result = apartmentService.sortByField(1, 10, "nameOfClient");
         assertEquals(3, result.size());
         assertEquals("Alisher", result.get(2).getNameOfClient());
     }
 
     @Test
     void sortByStatus() {
-        List<Apartment> result = apartmentService.sortByStatus(1, 10);
+        List<Apartment> result = apartmentService.sortByField(1, 10, "status");
         assertEquals(3, result.size());
         assertEquals(ApartmentStatusEnum.FREE, result.get(0).getApartmentStatus());
     }

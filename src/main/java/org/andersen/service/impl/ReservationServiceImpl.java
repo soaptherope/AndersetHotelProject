@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
             apartment.setNameOfClient(name);
-            apartmentService.updateApartment(apartment);
+            apartmentService.update(apartment);
 
             try {
                 stateRepository.saveSerializedData(apartment);
@@ -58,7 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
             apartment.setNameOfClient("");
-            apartmentService.updateApartment(apartment);
+            apartmentService.update(apartment);
 
             try {
                 stateRepository.saveSerializedData(apartment);
