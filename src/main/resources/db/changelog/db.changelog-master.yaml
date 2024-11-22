@@ -20,3 +20,70 @@ databaseChangeLog:
             constraintName: pk_serialized_data
             tableName: serialized_data
             columnNames: id
+
+  - changeSet:
+      id: 2
+      author: alisher.s
+      changes:
+        - createTable:
+            tableName: hotels
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 3
+      author: alisher.s
+      changes:
+        - createTable:
+            tableName: apartments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: apartment_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_name
+                  type: varchar(40)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: hotel_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4
+      author: alisher.s
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_apartment_hotel
+            baseTableName: apartments
+            baseColumnNames: hotel_id
+            referencedTableName: hotels
+            referencedColumnNames: id
+            onDelete: CASCADE

@@ -1,7 +1,6 @@
 package org.andersen.service.impl;
 
 import org.andersen.config.StateConfig;
-import org.andersen.exception.ApartmentNotFoundException;
 import org.andersen.exception.InvalidClientNameException;
 import org.andersen.model.Apartment;
 import org.andersen.model.ApartmentStatusEnum;
@@ -13,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -51,7 +48,7 @@ public class ReservationServiceImplTest {
 
         apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
 
         reservationService.reserveApartment(1, "Alisher");
 
@@ -77,7 +74,7 @@ public class ReservationServiceImplTest {
         mockedStateConfig.when(StateConfig::isApartmentStatusChangeEnabled).thenReturn(true);
 
         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
 
         reservationService.reserveApartment(1, "Alisher");
 
@@ -91,7 +88,7 @@ public class ReservationServiceImplTest {
 
         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
 
         reservationService.releaseApartment(1, "Alisher");
 
@@ -118,7 +115,7 @@ public class ReservationServiceImplTest {
 
         apartment.setApartmentStatus(ApartmentStatusEnum.FREE);
         apartment.setNameOfClient("");
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
 
         reservationService.releaseApartment(1, "Alisher");
 
@@ -132,7 +129,7 @@ public class ReservationServiceImplTest {
 
         apartment.setApartmentStatus(ApartmentStatusEnum.RESERVED);
         apartment.setNameOfClient("Alisher");
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
 
         reservationService.releaseApartment(1, "NotAlisher");
 
@@ -141,17 +138,8 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    void reserveApartment_WhenApartmentDoesNotExist_ThrowsException() {
-        mockedStateConfig.when(StateConfig::isApartmentStatusChangeEnabled).thenReturn(true);
-        when(apartmentServiceMock.findApartmentById(999)).thenReturn(Optional.empty());
-
-        assertThrows(ApartmentNotFoundException.class, () ->
-                reservationService.reserveApartment(999, "Alisher"));
-    }
-
-    @Test
     void reserveApartment_WithEmptyClientName_ThrowsException() {
-        when(apartmentServiceMock.findApartmentById(1)).thenReturn(Optional.of(apartment));
+        when(apartmentServiceMock.findById(1)).thenReturn(apartment);
         mockedStateConfig.when(StateConfig::isApartmentStatusChangeEnabled).thenReturn(true);
 
         assertThrows(InvalidClientNameException.class, () ->

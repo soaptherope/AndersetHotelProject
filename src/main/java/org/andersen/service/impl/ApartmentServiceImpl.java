@@ -1,62 +1,39 @@
 package org.andersen.service.impl;
 
 import org.andersen.model.Apartment;
-import org.andersen.model.Hotel;
-import org.andersen.service.ApartmentService;
+import org.andersen.model.dao.impl.ApartmentDaoImpl;
+import org.andersen.service.CrudService;
+import org.andersen.service.SortService;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.function.Function;
 
-public class ApartmentServiceImpl implements ApartmentService {
+public class ApartmentServiceImpl implements SortService<Apartment>, CrudService<Apartment> {
 
-    private final Hotel hotel;
+    private final ApartmentDaoImpl apartmentDao;
 
-    public ApartmentServiceImpl(Hotel hotel) {
-        this.hotel = hotel;
+    public ApartmentServiceImpl(ApartmentDaoImpl apartmentDao) {
+        this.apartmentDao = apartmentDao;
     }
 
     @Override
-    public List<Apartment> getAllApartments() {
-        return hotel.getApartments();
-    }
+    public List<Apartment> sortByField(int pageNumber, int pageSize, String fieldName) {
+        List<Apartment> sortedApartments = apartmentDao.findAll();
 
-    @Override
-    public Optional<Apartment> findApartmentById(int id) {
-        return hotel.getApartments().stream()
-                .filter(apartment -> apartment.getId() == id)
-                .findFirst();
-    }
+        Map<String, Function<Apartment, Comparable>> sortFields = Map.of(
+                "id", Apartment::getId,
+                "price", Apartment::getPrice,
+                "nameOfClient", Apartment::getNameOfClient,
+                "status", Apartment::getApartmentStatus
+        );
 
-    @Override
-    public List<Apartment> sortById(int pageNumber, int pageSize) {
-        List<Apartment> sortedApartments = hotel.getApartments();
-        sortedApartments.sort(Comparator.comparingInt(Apartment::getId));
-
-        return getPaginatedList(sortedApartments, pageNumber, pageSize);
-    }
-
-    @Override
-    public List<Apartment> sortByPrice(int pageNumber, int pageSize) {
-        List<Apartment> sortedApartments = hotel.getApartments();
-        sortedApartments.sort(Comparator.comparingDouble(Apartment::getPrice));
-
-        return getPaginatedList(sortedApartments, pageNumber, pageSize);
-    }
-
-    @Override
-    public List<Apartment> sortByNameOfClient(int pageNumber, int pageSize) {
-        List<Apartment> sortedApartments = hotel.getApartments();
-        sortedApartments.sort(Comparator.comparing(Apartment::getNameOfClient));
-
-        return getPaginatedList(sortedApartments, pageNumber, pageSize);
-    }
-
-    @Override
-    public List<Apartment> sortByStatus(int pageNumber, int pageSize) {
-        List<Apartment> sortedApartments = hotel.getApartments();
-        sortedApartments.sort(Comparator.comparing(Apartment::getApartmentStatus));
+        Function<Apartment, Comparable> fieldGetter = sortFields.get(fieldName);
+        if (fieldGetter != null) {
+            sortedApartments.sort(Comparator.comparing(fieldGetter));
+        }
 
         return getPaginatedList(sortedApartments, pageNumber, pageSize);
     }
@@ -71,5 +48,30 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         return list.subList(start, end);
+    }
+
+    @Override
+    public Apartment findById(long id) {
+        return apartmentDao.findById(id);
+    }
+
+    @Override
+    public void save(Apartment apartment) {
+        apartmentDao.save(apartment);
+    }
+
+    @Override
+    public void update(Apartment apartment) {
+        apartmentDao.update(apartment);
+    }
+
+    @Override
+    public void delete(Apartment apartment) {
+        apartmentDao.delete(apartment);
+    }
+
+    @Override
+    public List<Apartment> findAll() {
+        return apartmentDao.findAll();
     }
 }
